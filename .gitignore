@@ -1,0 +1,10 @@
+**/target/
+**/.classpath
+**/.project
+**/.settings/
+**/.idea/
+**/node_modules/
+.env
+.env.*
+!.env.example
+*.log

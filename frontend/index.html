@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shared Facility Cost Allocation</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-mark">SF</div>
+    <div><h1>Shared Facility</h1><p>Utility cost allocation workspace</p></div>
+    <span class="status"><i></i> Local demo</span>
+  </header>
+  <main class="container">
+    <section class="hero">
+      <div><p class="eyebrow">FACILITIES FINANCE</p><h2>Cost allocation dashboard</h2>
+      <p>Allocate a shared utility invoice fairly using department meter usage and a configurable common-area share.</p></div>
+      <button id="refreshBtn" class="button secondary">↻ Refresh data</button>
+    </section>
+    <div id="notice" class="notice hidden"></div>
+    <section class="stats">
+      <article class="stat"><span>Invoices</span><strong id="invoiceCount">—</strong><small>Stored in MySQL</small></article>
+      <article class="stat"><span>Selected invoice</span><strong id="selectedTotal">₹—</strong><small id="selectedInvoiceLabel">Choose an invoice</small></article>
+      <article class="stat"><span>Allocation status</span><strong id="selectedStatus">—</strong><small>Reconciled to invoice total</small></article>
+    </section>
+    <div class="columns">
+      <section class="panel">
+        <div class="panel-head"><div><h3>Utility invoices</h3><p>Select an invoice or create a new one.</p></div></div>
+        <div id="invoiceList" class="invoice-list"><div class="empty">Loading invoices…</div></div>
+        <form id="invoiceForm" class="form-block">
+          <h4>New invoice</h4>
+          <label>Invoice number<input name="invoiceNumber" placeholder="INV-1002" required></label>
+          <label>Utility provider<input name="provider" placeholder="City Utilities" required></label>
+          <div class="two">
+            <label>Billing period<input name="period" placeholder="2026-10" required></label>
+            <label>Invoice total (₹)<input name="totalAmount" type="number" min="0.01" step="0.01" placeholder="12500.00" required></label>
+          </div>
+          <label>Common-area share (%)<input name="commonAreaPercent" type="number" min="0" max="100" step="0.01" value="15" required></label>
+          <button class="button primary" type="submit">＋ Save invoice</button>
+        </form>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><div><h3>Department meter usage</h3><p>Enter usage for the selected invoice.</p></div></div>
+        <form id="usageForm">
+          <div id="usageRows"></div>
+          <div class="actions">
+            <button type="button" id="addDeptBtn" class="button secondary">＋ Add department</button>
+            <button class="button primary" type="submit">Save meter usage</button>
+          </div>
+        </form>
+        <div class="allocation-action">
+          <div><h4>Ready to allocate?</h4><p>Direct costs and common-area costs are distributed by meter usage.</p></div>
+          <button id="allocateBtn" class="button accent">Allocate costs →</button>
+        </div>
+      </section>
+    </div>
+    <section class="panel results-panel">
+      <div class="panel-head"><div><h3>Allocation results</h3><p>Every amount is rounded to two decimals; the total is reconciled to the invoice.</p></div><span id="reconcileBadge" class="badge muted">Not allocated</span></div>
+      <div class="table-wrap"><table><thead><tr><th>Department</th><th>Meter units</th><th>Direct cost</th><th>Common cost</th><th>Total allocated</th></tr></thead><tbody id="allocationRows"><tr><td colspan="5" class="empty">Select an invoice and allocate costs.</td></tr></tbody><tfoot id="allocationFoot"></tfoot></table></div>
+    </section>
+    <section class="panel">
+      <div class="panel-head"><div><h3>Workflow event log</h3><p>Persisted event envelope and allocation status.</p></div><button id="eventsBtn" class="button secondary">Refresh events</button></div>
+      <div id="eventList" class="event-list"><div class="empty">No events loaded.</div></div>
+      <p class="footnote">Demo note: this starter persists the event record in MySQL. Kafka is provided in Docker Compose for the next integration step; do not describe the event as Kafka-consumed until that integration is implemented and verified.</p>
+    </section>
+    <footer>Shared Facility Cost Allocation · SOA hackathon demo</footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
